@@ -1,30 +1,53 @@
 <?php
 
-    session_start();
+session_start();
 
-    // Change with URL
-    header("Access-Control-Allow-Origin: null");
-    header("Access-Control-Allow-Headers: Content-Type, credentials");
-    header("Access-Control-Allow-Credentials: true");
-    header("Access-Control-Allow-Methods: *");
+// Change with URL
+header("Access-Control-Allow-Origin: null");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: *");
 
-    // Cookie Options
-    $cookie_options = array(
-        'samesite' => 'None',
-        'secure' => true
-    );
+// Cookie Options
+// $cookie_options = array(
+//     'samesite' => 'None',
+//     'secure' => true
+// );
 
-    setcookie("PHPSESSID", session_id(), $cookie_options);
+// setcookie("PHPSESSID", session_id(), $cookie_options);
 
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "kodego_db";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "kodego_db";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    if ($conn->connect_error) {
-        die("Connection error: " . $conn->connect_error);
+if ($conn->connect_error) {
+    die("Connection error: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $valid = false;
+    $test = session_id();
+
+    if (isset($_SESSION['user_id'])) {
+        $valid = true;
+        $response = array(
+            'success' => true,
+            'valid' => $valid,
+            'user_id' => $_SESSION['user_id'],
+            'sess_id' => $test
+        );
+    } else {
+        $response = array(
+            'success' => false,
+            'valid' => $valid,
+            'sess_id' => $test
+        );
     }
+
+    echo json_encode($response);
+}
 
 ?>

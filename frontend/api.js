@@ -1,5 +1,6 @@
 // Constant Variables
 const endpoint = "http://localhost/project/api/";
+const filePath = window.location.pathname;
 const selectValue = (q) => {
     return document.querySelector(q).value;
 }
@@ -7,7 +8,7 @@ const selectForm = (q) => {
     return document.querySelector(q);
 }
 const path = () => {
-    const split = window.location.pathname.split("/");
+    const split = filePath.split("/");
     split.pop();
     return split.toString().replaceAll(",", "/");
 }
@@ -23,7 +24,29 @@ try {
     registrationForm.addEventListener("submit", register);
 } catch (err) { }
 
+// try {
+//     const registrationForm = selectForm("body");
+//     registrationForm.addEventListener("load", checkSess);
+// } catch (err) { }
+
 // Functions
+checkSess();
+function checkSess() {
+    fetch(`${endpoint}config.php`, {
+        credentials: 'include',
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // if (data.valid && (filePath == `${path}/login.html` || filePath == `${path}/register.html`)) {
+        //     window.location.replace("index.html");
+        // } else if (!data.valid && (filePath != `${path}/login.html` && filePath != `${path}/register.html`)) {
+        //     window.location.replace("login.html");
+        // }
+    })
+}
+
 function register(evt) {
     evt.preventDefault();
 
@@ -36,10 +59,10 @@ function register(evt) {
 
     if (password === confirm_password) {
         fetch(`${endpoint}register.php`, {
+            credentials: 'include',
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'credentials': 'include'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 firstname: firstname,
@@ -70,10 +93,10 @@ function login(evt) {
     const password = selectValue("#password");
 
     fetch(`${endpoint}login.php`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'credentials': 'include'
         },
         body: JSON.stringify({
             email: email,
