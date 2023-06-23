@@ -14,12 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $result = $conn->query($sql);
 
-    if ($result->num_rows === 0) {
+    if ($result->num_rows == 0) {
         $password = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO users (firstname, lastname, email, birthdate, password)
                 VALUES ('$firstname', '$lastname', '$email', '$birthdate', '$password');";
-        
+
         if ($conn->query($sql)) {
             $response = array(
                 'success' => true,
