@@ -1,7 +1,10 @@
 // Constant Variables
 const endpoint = "http://localhost/project/api/";
-const select = (q) => {
+const selectValue = (q) => {
     return document.querySelector(q).value;
+}
+const selectForm = (q) => {
+    return document.querySelector(q);
 }
 const path = () => {
     const split = window.location.pathname.split("/");
@@ -11,12 +14,12 @@ const path = () => {
 
 // Events
 try {
-    const loginForm = select("#loginForm");
+    const loginForm = selectForm("#loginForm");
     loginForm.addEventListener("submit", login);
 } catch (err) { }
 
 try {
-    const registrationForm = select("#registrationForm");
+    const registrationForm = selectForm("#registrationForm");
     registrationForm.addEventListener("submit", register);
 } catch (err) { }
 
@@ -24,12 +27,12 @@ try {
 function register(evt) {
     evt.preventDefault();
 
-    const firstname = select("#firstname");
-    const lastname = select("#lastname");
-    const email = select("#email");
-    const birthdate = select("#birthdate");
-    const password = select("#password");
-    const confirm_password = select("#confirm_password");
+    const firstname = selectValue("#firstname");
+    const lastname = selectValue("#lastname");
+    const email = selectValue("#email");
+    const birthdate = selectValue("#birthdate");
+    const password = selectValue("#password");
+    const confirm_password = selectValue("#confirm_password");
 
     if (password === confirm_password) {
         fetch(`${endpoint}register.php`, {
@@ -63,8 +66,8 @@ function register(evt) {
 function login(evt) {
     evt.preventDefault();
 
-    const email = select("#email");
-    const password = select("#password");
+    const email = selectValue("#email");
+    const password = selectValue("#password");
 
     fetch(`${endpoint}login.php`, {
         method: 'POST',
