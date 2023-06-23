@@ -20,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $record['id'];
             $response = array(
                 'success' => true,
-                'message' => 'Login Successful',
-                'user_id' => $_SESSION['user_id']
+                'message' => 'Login Successful'
             );
         } else {
             $response = array(
@@ -38,25 +37,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo json_encode($response);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && !isset($_GET['id'])) {
-    $valid = false;
+// if ($_SERVER['REQUEST_METHOD'] == 'GET' && !isset($_GET['id'])) {
+//     $valid = false;
 
-    if (isset($_SESSION['user_id'])) {
-        $valid = true;
-        $response = array(
-            'success' => true,
-            'valid' => $valid,
-            'user_id' => $_SESSION['user_id']
-        );
-    } else {
-        $response = array(
-            'success' => false,
-            'valid' => $valid
-        );
-    }
+//     if (isset($_SESSION['user_id'])) {
+//         $valid = true;
+//         $response = array(
+//             'success' => true,
+//             'valid' => $valid,
+//             'user_id' => $_SESSION['user_id']
+//         );
+//     } else {
+//         $response = array(
+//             'success' => false,
+//             'valid' => $valid
+//         );
+//     }
 
-    echo json_encode($response);
-}
+//     echo json_encode($response);
+// }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $id = $_GET['id'];

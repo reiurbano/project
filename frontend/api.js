@@ -19,6 +19,10 @@ try {
 } catch (err) { }
 
 try {
+    window.addEventListener("load", getTweets);
+} catch (err) { }
+
+try {
     const loginForm = selectForm("#loginForm");
     loginForm.addEventListener("submit", login);
 } catch (err) { }
@@ -33,14 +37,20 @@ try {
     logoutButton.addEventListener("click", logout);
 } catch (err) { }
 
+try {
+    const tweetButton = selectForm("#tweetButton");
+    tweetButton.addEventListener("click", createTweets);
+} catch (err) { }
+
 // Functions
 function checkSess() {
-    fetch(`${endpoint}login.php`, {
+    fetch(`${endpoint}test.php`, {
         credentials: 'include',
         method: 'GET'
     })
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             if (data.valid && (filePath == `${path()}/login.html` || filePath == `${path()}/register.html`)) {
                 window.location.replace("index.html");
             } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
@@ -137,4 +147,43 @@ function logout() {
             window.location.replace("login.html");
         })
         .catch(err => console.log('err', err))
+}
+
+function createTweets() {
+    const contentArea = document.querySelector("#tweet").value;
+    fetch(`${endpoint}createtweet.php`, {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify({
+            content: contentArea
+        })
+    })
+        .then(response => console.log(response.text()))
+        .then(data => {
+            document.querySelector("#tweet").value = "";
+            getTweets();
+        })
+}
+
+function getTweets() {
+    fetch(`${endpoint}gettweets.php`, {
+        credentials: 'include',
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            let tweets = "";
+            data.forEach((tweet) => {
+                tweets += `
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <p class="fw-bold">${tweet.firstname} ${tweet.lastname}</p>
+                            <p>${tweet.content}</p>
+                            <p class="fw-bold">${tweet.date}</p>
+                        </div>
+                    </div>
+                `;
+            })
+            document.querySelector("#feed").innerHTML = tweets;
+        })
 }
