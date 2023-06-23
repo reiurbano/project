@@ -29,21 +29,18 @@ if ($conn->connect_error) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $valid = false;
-    $test = session_id();
 
     if (isset($_SESSION['user_id'])) {
         $valid = true;
         $response = array(
             'success' => true,
             'valid' => $valid,
-            'user_id' => $_SESSION['user_id'],
-            'sess_id' => $test
+            'user_id' => $_SESSION['user_id']
         );
     } else {
         $response = array(
             'success' => false,
-            'valid' => $valid,
-            'sess_id' => $test
+            'valid' => $valid
         );
     }
 

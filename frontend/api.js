@@ -15,6 +15,10 @@ const path = () => {
 
 // Events
 try {
+    window.addEventListener("load", checkSess);
+} catch (err) { }
+
+try {
     const loginForm = selectForm("#loginForm");
     loginForm.addEventListener("submit", login);
 } catch (err) { }
@@ -24,13 +28,7 @@ try {
     registrationForm.addEventListener("submit", register);
 } catch (err) { }
 
-// try {
-//     const registrationForm = selectForm("body");
-//     registrationForm.addEventListener("load", checkSess);
-// } catch (err) { }
-
 // Functions
-checkSess();
 function checkSess() {
     fetch(`${endpoint}config.php`, {
         credentials: 'include',
@@ -38,12 +36,11 @@ function checkSess() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
-        // if (data.valid && (filePath == `${path}/login.html` || filePath == `${path}/register.html`)) {
-        //     window.location.replace("index.html");
-        // } else if (!data.valid && (filePath != `${path}/login.html` && filePath != `${path}/register.html`)) {
-        //     window.location.replace("login.html");
-        // }
+        if (data.valid && (filePath == `${path()}/login.html` || filePath == `${path()}/register.html`)) {
+            window.location.replace("index.html");
+        } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
+            window.location.replace("login.html");
+        }
     })
 }
 
