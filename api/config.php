@@ -8,13 +8,12 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: *");
 
-// Cookie Options
-// $cookie_options = array(
-//     'samesite' => 'None',
-//     'secure' => true
-// );
+$cookie_options = array(
+    'samesite' => 'None',
+    'secure' => true
+);
 
-// setcookie("PHPSESSID", session_id(), $cookie_options);
+setcookie("PHPSESSID", session_id(), $cookie_options);
 
 $servername = "localhost";
 $username = "root";

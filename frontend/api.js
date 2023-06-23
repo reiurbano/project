@@ -28,20 +28,25 @@ try {
     registrationForm.addEventListener("submit", register);
 } catch (err) { }
 
+try {
+    const logoutButton = selectForm("#logout");
+    logoutButton.addEventListener("click", logout);
+} catch (err) { }
+
 // Functions
 function checkSess() {
     fetch(`${endpoint}config.php`, {
         credentials: 'include',
         method: 'GET'
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.valid && (filePath == `${path()}/login.html` || filePath == `${path()}/register.html`)) {
-            window.location.replace("index.html");
-        } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
-            window.location.replace("login.html");
-        }
-    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.valid && (filePath == `${path()}/login.html` || filePath == `${path()}/register.html`)) {
+                window.location.replace("index.html");
+            } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
+                window.location.replace("login.html");
+            }
+        })
 }
 
 function register(evt) {
@@ -109,4 +114,17 @@ function login(evt) {
                 alert(data.message);
             }
         })
+}
+
+function logout() {
+    fetch(`${endpoint}logout.php`, {
+        credentials: 'include',
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            window.location.replace("login.html");
+        })
+        .catch(err => console.log('err', err))
 }
