@@ -36,8 +36,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         );
     }
     echo json_encode($response);
-} else {
-    echo "Invalid Request";
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && !isset($_GET['id'])) {
+    $valid = false;
+
+    if (isset($_SESSION['user_id'])) {
+        $valid = true;
+        $response = array(
+            'success' => true,
+            'valid' => $valid,
+            'user_id' => $_SESSION['user_id']
+        );
+    } else {
+        $response = array(
+            'success' => false,
+            'valid' => $valid
+        );
+    }
+
+    echo json_encode($response);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $sql = "SELECT * FROM users WHERE id = '$id';";
+
+    $result = $conn->query($sql);
+    $record = $result->fetch_assoc();
+
+    $user = array(
+        'id' => $record['id'],
+        'firstname' => $record['firstname'],
+        'lastname' => $record['lastname'],
+        'email' => $record['email'],
+        'birthdate' => $record['birthdate']
+    );
+
+    $response = array(
+        'success' => true,
+        'user' => $user
+    );
+
+    echo json_encode($response);
 }
 
 ?>

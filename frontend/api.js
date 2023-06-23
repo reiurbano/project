@@ -35,7 +35,7 @@ try {
 
 // Functions
 function checkSess() {
-    fetch(`${endpoint}config.php`, {
+    fetch(`${endpoint}login.php`, {
         credentials: 'include',
         method: 'GET'
     })
@@ -45,6 +45,16 @@ function checkSess() {
                 window.location.replace("index.html");
             } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
                 window.location.replace("login.html");
+            } else if (data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
+                fetch(`${endpoint}login.php?id=${data.user_id}`, {
+                    credentials: 'include',
+                    method: 'GET'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector("#user").innerHTML = 
+                        `${data.user.firstname} ${data.user.lastname}`;
+                    })
             }
         })
 }
