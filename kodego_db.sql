@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2023 at 04:28 AM
+-- Generation Time: Jun 24, 2023 at 09:42 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -28,11 +28,20 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tweets` (
-  `id` int(11) NOT NULL,
-  `content` varchar(255) NOT NULL,
+  `tweet_id` int(11) NOT NULL,
+  `content` varchar(420) NOT NULL,
   `date_tweeted` date NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `tweets`
+--
+
+INSERT INTO `tweets` (`tweet_id`, `content`, `date_tweeted`, `user_id`) VALUES
+(8, 'Test', '2023-06-23', 4),
+(13, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit turpis cursus in hac habitasse platea dictumst quisque. Tincidunt ornare massa eget egestas purus viverra accumsan.', '2023-06-24', 5),
+(14, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Velit laoreet id donec ultrices tincidunt arcu. Nunc faucibus a pellentesque sit. In fermentum posuere urna nec tincidunt praesent semper feugiat. Massa sed elementum tempus egestas sed sed risus pretium. Nunc consequat interdum varius sit amet mattis vulputate enim nulla.', '2023-06-24', 5);
 
 -- --------------------------------------------------------
 
@@ -41,13 +50,21 @@ CREATE TABLE `tweets` (
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `firstname` varchar(255) NOT NULL,
   `lastname` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `birthdate` date NOT NULL,
-  `password` int(11) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `birthdate`, `password`) VALUES
+(4, 'Rei Karlu', 'Urbano', 'ReiUrbano@test.com', '2002-05-24', '$2y$10$.AhCt4uMXFIga3Jya/23cOWlm6GBWf0Etx1Kx/39TRn4Fuhjbn5Qu'),
+(5, 'John', 'Doe', 'John@test.com', '1999-11-11', '$2y$10$K1bkWD2Calwi1e.tr9Nz1OkqGvHCwJLibEAvtWVz6L0zbjW88GWua');
 
 --
 -- Indexes for dumped tables
@@ -57,14 +74,14 @@ CREATE TABLE `users` (
 -- Indexes for table `tweets`
 --
 ALTER TABLE `tweets`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
+  ADD PRIMARY KEY (`tweet_id`),
+  ADD KEY `user_id` (`user_id`) USING BTREE;
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -74,13 +91,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `tweets`
 --
 ALTER TABLE `tweets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tweet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -90,7 +107,7 @@ ALTER TABLE `users`
 -- Constraints for table `tweets`
 --
 ALTER TABLE `tweets`
-  ADD CONSTRAINT `tweets_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tweets_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
