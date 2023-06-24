@@ -19,10 +19,6 @@ try {
 } catch (err) { }
 
 try {
-    window.addEventListener("load", getTweets);
-} catch (err) { }
-
-try {
     const loginForm = selectForm("#loginForm");
     loginForm.addEventListener("submit", login);
 } catch (err) { }
@@ -42,7 +38,17 @@ try {
     tweetButton.addEventListener("click", createTweets);
 } catch (err) { }
 
-// Functions
+try {
+    const newProfileForm = selectForm("#changeProfile");
+    newProfileForm.addEventListener("submit", profileSet);
+} catch (err) { }
+
+try {
+    const newPasswordForm = selectForm("#changePassword");
+    newPasswordForm.addEventListener("submit", passwordSet);
+} catch (err) { }
+
+// Session Management
 function checkSess() {
     fetch(`${endpoint}login.php`, {
         credentials: 'include',
@@ -54,20 +60,22 @@ function checkSess() {
                 window.location.replace("index.html");
             } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
                 window.location.replace("login.html");
-            } else if (data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
+            } else if (data.valid && (filePath == `${path()}/index.html`)) {
+                getTweets();
                 fetch(`${endpoint}login.php?id=${data.user_id}`, {
                     credentials: 'include',
                     method: 'GET'
                 })
                     .then(response => response.json())
                     .then(data => {
-                        document.querySelector("#user").innerHTML = 
-                        `${data.user.firstname} ${data.user.lastname}`;
+                        document.querySelector("#user").innerHTML =
+                            `${data.user.firstname} ${data.user.lastname}`;
                     })
             }
         })
 }
 
+// Register, Login & Logout Functions
 function register(evt) {
     evt.preventDefault();
 
@@ -147,6 +155,7 @@ function logout() {
         })
 }
 
+// Tweet Functions
 function createTweets() {
     const contentArea = document.querySelector("#tweet").value;
     fetch(`${endpoint}createtweet.php`, {
@@ -197,4 +206,62 @@ function deleteTweets(q) {
             alert(data.message);
             getTweets();
         })
+}
+
+// Profile Setting Functions
+function profileSet() {
+    const newfirstname = selectValue("#newFirstname");
+    const newlastname = selectValue("#newLastname");
+    const newemail = selectValue("#newEmail");
+    const newbirthdate = selectValue("#newBirthdate");
+
+    fetch(`${endpoint}changeprofile.php`, {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            firstname: newfirstname,
+            lastname: newlastname,
+            email: newemail,
+            birthdate: newbirthdate
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert(data.message);
+            }
+        })
+}
+
+function passwordSet() {
+    const newPassword = selectValue("#newPass");
+    const confirm_newPassword = selectValue("#confirm_newPass");
+
+    if (newPassword === confirm_newPassword) {
+        fetch(`${endpoint}changepassword.php`, {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                password: newPassword
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    alert(data.success);
+                }
+            })
+    } else {
+        alert("Passwords do not Match");
+    }
 }
