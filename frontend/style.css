@@ -1,0 +1,12 @@
+body {
+    background-color: #393939;
+}
+
+main {
+    background-color: #e9ecef;
+}
+
+textarea {
+    resize: none;
+    height: 10rem !important;
+}
