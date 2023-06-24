@@ -178,7 +178,7 @@ function getTweets() {
                             <p class="fw-bold">${tweet.firstname} ${tweet.lastname}</p>
                             <p>${tweet.content}</p>
                             <p class="fw-bold">${tweet.date}</p>
-                            ${(tweet.user) ? `<button onclick="deleteTweets(${tweet.id})" class="btn btn-danger">Delete Tweet</button>` : `<p></p>`}
+                            ${(tweet.user) ? `<button onclick="deleteTweets(${tweet.id})" class="btn btn-danger">Delete Tweet</button>` : ''}
                         </div>
                     </div>
                 `;
