@@ -67,7 +67,7 @@ function checkSess() {
         .then(data => {
             if (!data.valid && (invalidPages.every(checkInvalid))) {
                 window.location.replace("login.html");
-            } else if (data.valid && (filePath != `${path()}/index.html`)) {
+            } else if (data.valid && (validPages.every(checkInvalid))) {
                 window.location.replace("index.html");
             } else if (data.valid && (filePath == `${path()}/index.html`)) {
                 getTweets();
