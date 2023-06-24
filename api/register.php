@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $birthdate = $data['birthdate'];
     $password = $data['password'];
 
-    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $sql = "SELECT * FROM users WHERE email = '$email';";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 0) {

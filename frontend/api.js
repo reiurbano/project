@@ -44,13 +44,12 @@ try {
 
 // Functions
 function checkSess() {
-    fetch(`${endpoint}test.php`, {
+    fetch(`${endpoint}login.php`, {
         credentials: 'include',
         method: 'GET'
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (data.valid && (filePath == `${path()}/login.html` || filePath == `${path()}/register.html`)) {
                 window.location.replace("index.html");
             } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
@@ -146,7 +145,6 @@ function logout() {
             alert(data.message);
             window.location.replace("login.html");
         })
-        .catch(err => console.log('err', err))
 }
 
 function createTweets() {
@@ -180,10 +178,23 @@ function getTweets() {
                             <p class="fw-bold">${tweet.firstname} ${tweet.lastname}</p>
                             <p>${tweet.content}</p>
                             <p class="fw-bold">${tweet.date}</p>
+                            ${(tweet.user) ? `<button onclick="deleteTweets(${tweet.id})" class="btn btn-danger">Delete Tweet</button>` : `<p></p>`}
                         </div>
                     </div>
                 `;
             })
             document.querySelector("#feed").innerHTML = tweets;
+        })
+}
+
+function deleteTweets(q) {
+    fetch(`${endpoint}deletetweet.php?id=${q}`, {
+        credentials: 'include',
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            getTweets();
         })
 }
