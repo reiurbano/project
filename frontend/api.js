@@ -1,16 +1,25 @@
 // Constant Variables
 const endpoint = "http://localhost/project/api/";
 const filePath = window.location.pathname;
-const selectValue = (q) => {
-    return document.querySelector(q).value;
-}
-const selectForm = (q) => {
-    return document.querySelector(q);
-}
 const path = () => {
     const split = filePath.split("/");
     split.pop();
     return split.toString().replaceAll(",", "/");
+}
+const validPages = [
+    `${path()}/index.html`, 
+    `${path()}/changeprofile.html`, 
+    `${path()}/changepassword.html`
+];
+const invalidPages = [
+    `${path()}/login.html`, 
+    `${path()}/register.html`
+];
+function checkInvalid(path) {
+    return filePath != path;
+}
+function checkValid(path) {
+    return filePath == path;
 }
 
 // Events
@@ -19,32 +28,32 @@ try {
 } catch (err) { }
 
 try {
-    const loginForm = selectForm("#loginForm");
+    const loginForm = document.querySelector("#loginForm");
     loginForm.addEventListener("submit", login);
 } catch (err) { }
 
 try {
-    const registrationForm = selectForm("#registrationForm");
+    const registrationForm = document.querySelector("#registrationForm");
     registrationForm.addEventListener("submit", register);
 } catch (err) { }
 
 try {
-    const logoutButton = selectForm("#logout");
+    const logoutButton = document.querySelector("#logout");
     logoutButton.addEventListener("click", logout);
 } catch (err) { }
 
 try {
-    const tweetButton = selectForm("#tweetButton");
+    const tweetButton = document.querySelector("#tweetButton");
     tweetButton.addEventListener("click", createTweets);
 } catch (err) { }
 
 try {
-    const newProfileForm = selectForm("#changeProfile");
+    const newProfileForm = document.querySelector("#changeProfile");
     newProfileForm.addEventListener("submit", profileSet);
 } catch (err) { }
 
 try {
-    const newPasswordForm = selectForm("#changePassword");
+    const newPasswordForm = document.querySelector("#changePassword");
     newPasswordForm.addEventListener("submit", passwordSet);
 } catch (err) { }
 
@@ -56,10 +65,10 @@ function checkSess() {
     })
         .then(response => response.json())
         .then(data => {
-            if (data.valid && (filePath == `${path()}/login.html` || filePath == `${path()}/register.html`)) {
-                window.location.replace("index.html");
-            } else if (!data.valid && (filePath != `${path()}/login.html` && filePath != `${path()}/register.html`)) {
+            if (!data.valid && (invalidPages.every(checkInvalid))) {
                 window.location.replace("login.html");
+            } else if (data.valid && (filePath != `${path()}/index.html`)) {
+                window.location.replace("index.html");
             } else if (data.valid && (filePath == `${path()}/index.html`)) {
                 getTweets();
                 fetch(`${endpoint}login.php?id=${data.user_id}`, {
@@ -79,12 +88,12 @@ function checkSess() {
 function register(evt) {
     evt.preventDefault();
 
-    const firstname = selectValue("#firstname");
-    const lastname = selectValue("#lastname");
-    const email = selectValue("#email");
-    const birthdate = selectValue("#birthdate");
-    const password = selectValue("#password");
-    const confirm_password = selectValue("#confirm_password");
+    const firstname = document.querySelector("#firstname").value;
+    const lastname = document.querySelector("#lastname").value;
+    const email = document.querySelector("#email").value;
+    const birthdate = document.querySelector("#birthdate").value;
+    const password = document.querySelector("#password").value;
+    const confirm_password = document.querySelector("#confirm_password").value;
 
     if (password === confirm_password) {
         fetch(`${endpoint}register.php`, {
@@ -118,8 +127,8 @@ function register(evt) {
 function login(evt) {
     evt.preventDefault();
 
-    const email = selectValue("#email");
-    const password = selectValue("#password");
+    const email = document.querySelector("#email").value;
+    const password = document.querySelector("#password").value;
 
     fetch(`${endpoint}login.php`, {
         credentials: 'include',
@@ -210,10 +219,10 @@ function deleteTweets(q) {
 
 // Profile Setting Functions
 function profileSet() {
-    const newfirstname = selectValue("#newFirstname");
-    const newlastname = selectValue("#newLastname");
-    const newemail = selectValue("#newEmail");
-    const newbirthdate = selectValue("#newBirthdate");
+    const newfirstname = document.querySelector("#newFirstname").value;
+    const newlastname = document.querySelector("#newLastname").value;
+    const newemail = document.querySelector("#newEmail").value;
+    const newbirthdate = document.querySelector("#newBirthdate").value;
 
     fetch(`${endpoint}changeprofile.php`, {
         credentials: 'include',
@@ -232,6 +241,7 @@ function profileSet() {
         .then(data => {
             if (data.success) {
                 alert(data.message);
+                window.location.replace("index.html");
             } else {
                 alert(data.message);
             }
@@ -239,8 +249,8 @@ function profileSet() {
 }
 
 function passwordSet() {
-    const newPassword = selectValue("#newPass");
-    const confirm_newPassword = selectValue("#confirm_newPass");
+    const newPassword = document.querySelector("#newPass").value;
+    const confirm_newPassword = document.querySelector("#confirm_newPass").value;
 
     if (newPassword === confirm_newPassword) {
         fetch(`${endpoint}changepassword.php`, {
@@ -257,6 +267,7 @@ function passwordSet() {
             .then(data => {
                 if (data.success) {
                     alert(data.message);
+                    window.location.replace("index.html");
                 } else {
                     alert(data.success);
                 }
