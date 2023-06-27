@@ -218,7 +218,9 @@ function deleteTweets(q) {
 }
 
 // Profile Setting Functions
-function profileSet() {
+function profileSet(evt) {
+    evt.preventDefault();
+
     const newfirstname = document.querySelector("#newFirstname").value;
     const newlastname = document.querySelector("#newLastname").value;
     const newemail = document.querySelector("#newEmail").value;
@@ -248,7 +250,9 @@ function profileSet() {
         })
 }
 
-function passwordSet() {
+function passwordSet(evt) {
+    evt.preventDefault();
+
     const newPassword = document.querySelector("#newPass").value;
     const confirm_newPassword = document.querySelector("#confirm_newPass").value;
 
